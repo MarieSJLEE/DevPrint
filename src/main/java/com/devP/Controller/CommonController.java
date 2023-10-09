@@ -54,4 +54,9 @@ public class CommonController {
             return "로그인 후 이용하세요.";
         }
     }
+
+    @RequestMapping(value = "/push", method = RequestMethod.GET)
+    public String pushNotificationView(){
+        return "pushNotification";
+    }
 }
