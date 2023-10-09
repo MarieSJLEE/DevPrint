@@ -65,6 +65,7 @@
             <br>
             <div class="row mb-3">
                 <label for="addMember" class="col-sm-2 col-form-label">일정 및 업무 분배</label>
+                <!-- <jsp:include page="/WEB-INF/views/addTask.jsp"/> -->
                 <jsp:include page="/WEB-INF/views/addWbsFile.jsp"/>
             </div>
             <br>

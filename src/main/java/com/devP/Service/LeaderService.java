@@ -1,9 +1,6 @@
 package com.devP.Service;
 
-import com.devP.VO.MemberVO;
-import com.devP.VO.ProjectGroupVO;
-import com.devP.VO.ProjectVO;
-import com.devP.VO.UserVO;
+import com.devP.VO.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,4 +33,8 @@ public interface LeaderService {
     int updateMemberDatas(ArrayList<MemberVO> memberVOList, Model model);
 
     void deleteMember(MemberVO vo, String userId, int projectId);
+
+    int getTaskDatas(TaskVO vo, Model model);
+
+    int addTask(TaskVO vo);
 }

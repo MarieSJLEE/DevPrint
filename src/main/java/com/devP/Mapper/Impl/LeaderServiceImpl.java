@@ -1,26 +1,18 @@
 package com.devP.Mapper.Impl;
 
 import com.devP.Mapper.Repository.MemberDAOMybatis;
-import com.devP.Service.LeaderService;
-import com.devP.Service.MailService;
-import com.devP.Service.ProjectService;
-import com.devP.Service.UserService;
-import com.devP.VO.MemberVO;
-import com.devP.VO.ProjectGroupVO;
-import com.devP.VO.ProjectVO;
-import com.devP.VO.UserVO;
+import com.devP.Service.*;
+import com.devP.VO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.ArrayList;
-import java.util.DuplicateFormatFlagsException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service("LeaderService")
 public class LeaderServiceImpl implements LeaderService {
@@ -33,10 +25,22 @@ public class LeaderServiceImpl implements LeaderService {
 	private ProjectService projectService;
 
 	@Autowired
+	private TaskService taskService;
+
+	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private HttpSession session;
+
+	public Map<String, String> setMemberMap(List<String> members){
+		Map<String, String> memberMap = new HashMap<String, String>();
+		for(String member: members){
+			String[] m = member.split(",");
+			memberMap.put(m[0], m[1]);
+		}
+		return memberMap;
+	}
 
 
 	@Override
@@ -173,6 +177,27 @@ public class LeaderServiceImpl implements LeaderService {
 
 		vo.setProjectId(projectId);
 		memberDAO.deleteMember(vo);
+	}
+
+	@Override
+	public int getTaskDatas(TaskVO vo, Model model){
+		List<String> memberList = memberDAO.getMemberNames(vo.getProjectId());
+		vo.setProjectId(Integer.parseInt(session.getAttribute("projectId").toString()));
+		vo.setUserId(session.getAttribute("id").toString());
+		model.addAttribute("taskList",taskService.getMyProjectTaskList(vo));
+
+		model.addAttribute("memberMap",setMemberMap(memberList));
+
+
+		return 200;
+	}
+
+	@Override
+	public int addTask(TaskVO vo){
+		vo.setProjectId(Integer.parseInt(session.getAttribute("projectId").toString()));
+		vo.setUserId(session.getAttribute("id").toString());
+		taskService.addTask(vo);
+		return 200;
 	}
 
 }

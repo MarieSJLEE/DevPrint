@@ -18,7 +18,7 @@
             <table class="btnTable">
                 <tr>
                     <td>
-                        <div class="leaderBtn"  onclick="location.href='#'">
+                        <div class="leaderBtn"  onclick="location.href='manageTask.do'">
                             <p class="label">일정 및 업무 수정</p>
                         </div>
                     <td>

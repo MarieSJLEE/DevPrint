@@ -130,4 +130,6 @@ public class TaskServiceImpl implements TaskService {
 		model.addAttribute("progresstaskcount", progresscount);
 		model.addAttribute("completedtaskcount", completedcount);
 	}
+
+	public void addTask(TaskVO vo){taskDAO.insertTask(vo);}
 }

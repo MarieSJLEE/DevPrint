@@ -3,10 +3,9 @@ package com.devP.Controller;
 import com.devP.Service.LeaderService;
 import com.devP.Service.ProjectService;
 import com.devP.Service.UserService;
-import com.devP.VO.MemberVO;
-import com.devP.VO.ProjectGroupVO;
-import com.devP.VO.ProjectVO;
-import com.devP.VO.UserVO;
+import com.devP.VO.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +35,7 @@ public class LeaderController {
     @Autowired
     private HttpSession session;
 
+
     // 멤버페이지
     @ModelAttribute("positionMap")
     public Map<String, String> setRoleMap(){
@@ -55,6 +55,22 @@ public class LeaderController {
         return positionMap;
 
     }
+    @ModelAttribute("categoryMap")
+    public Map<String, String> setCategoryMap(Model model){
+        Map<String,String> categoryMap = new HashMap<>();
+
+        categoryMap.put("1","기획");
+        categoryMap.put("2","디자인");
+        categoryMap.put("3","구현");
+        categoryMap.put("4","개발");
+        categoryMap.put("5","서버");
+        categoryMap.put("6","테스트");
+        categoryMap.put("7","완료");
+
+
+        return categoryMap;
+    }
+
 
     @RequestMapping(value="/project/leader.do", method=RequestMethod.GET)
     public String leaderDetailView(@RequestParam int projectId, ProjectVO vo, Model model){
@@ -119,6 +135,22 @@ public class LeaderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
 
         }
+
+    }
+    @RequestMapping(value="/project/manageTask.do", method = RequestMethod.GET)
+    public String manageTask(TaskVO vo, Model model){
+        vo.setProjectId(Integer.parseInt(session.getAttribute("projectId").toString()));
+        int result = leaderService.getTaskDatas(vo, model);
+        if (result == 200) return "manageTask";
+        else return "redirect:/";
+    }
+    @RequestMapping(value="project/addTask.do", method = RequestMethod.POST)
+    public String addTask(TaskVO vo){
+        System.out.println(vo.getCategory());
+        int result = leaderService.addTask(vo);
+
+        if(result == 200){ return "redirect:/project/manageTask.do";}
+        else {return "/";}
 
     }
 

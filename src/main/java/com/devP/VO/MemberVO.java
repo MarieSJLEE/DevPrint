@@ -10,7 +10,6 @@ public class MemberVO {
     public String userId;
     public String email;
     public String leader;
-
     public String position;
     public String role;
     public String getEmail;

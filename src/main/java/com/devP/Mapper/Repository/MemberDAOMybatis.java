@@ -5,13 +5,17 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class MemberDAOMybatis {
 
     @Autowired
     private SqlSessionTemplate mybatis;
+
+    public List<String> getMemberNames(int projectId){return mybatis.selectList("MemberDAO.getMemberNames", projectId);}
 
     //leader - 멤버페이지
     public List<MemberVO> getMemberList(int projectId){ return mybatis.selectList("MemberDAO.getMemberList", projectId); }

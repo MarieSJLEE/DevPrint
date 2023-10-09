@@ -11,7 +11,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%@include file="sidebar.jsp"%>
 <head>
-    <title>멤버관리</title>
+    <title></title>
 </head>
 <body>
 <div class="mv-100 container">

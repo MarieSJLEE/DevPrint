@@ -11,10 +11,12 @@ public class TaskVO {
 	private int projectId;
     private String userId;
     private String category;
+	private String workPackage;
     private int priority;
     private String depth;
     private String detail;
     private int progress;
+	private String status;
 
     private String startdate;
     private String enddate;
@@ -43,6 +45,10 @@ public class TaskVO {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	public String getWorkPackage() {return workPackage;	}
+	public void setWorkPackage(String workPackage) {this.workPackage = workPackage;	}
+	public String getStatus() {return status;	}
+	public void setStatus(String status) {this.status = status;	}
 	public int getPriority() {
 		return priority;
 	}

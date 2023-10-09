@@ -32,4 +32,9 @@
 		SELECT * FROM task WHERE projectId = #{projectId} AND userId = #{userId};
 	</select>
 
+	<insert id="insertTask">
+		INSERT into task( projectId, category, workPackage, depth, detail, userId, startdate, enddate)
+		VALUES (#{projectId},#{category}, #{workPackage},#{depth},#{detail},#{userId},#{startdate}, #{enddate});
+	</insert>
+
 </mapper>

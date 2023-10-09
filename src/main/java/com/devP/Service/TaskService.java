@@ -20,4 +20,6 @@ public interface TaskService {
 	int getUserTaskList(Model model);
 
 	void getTaskCount(Model model);
+
+	void addTask(TaskVO vo);
 }
