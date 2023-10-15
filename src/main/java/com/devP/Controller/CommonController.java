@@ -28,6 +28,7 @@ public class CommonController {
         String userId = (String)session.getAttribute("id");
         session.setAttribute("title", logincheck(userId, request));
         session.removeAttribute("projectName");
+        session.removeAttribute("projectId");
 
         if(session.getAttribute("id")!=null) {
             issueService.getUserIssueList(model);
