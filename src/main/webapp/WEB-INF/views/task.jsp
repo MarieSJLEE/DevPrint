@@ -81,49 +81,41 @@
     </div>
 </div>
 <script type="text/javascript">
-    var taskData = JSON.parse(`[
-            <c:forEach items="${taskList}" var="task" varStatus="status">
-                {
-                    "Task ID": "${task.taskId}",
-                    "Task Name": "${task.detail}",
-                    "Resource": null,
-                    "Start Date": "${task.startdate}",
-                    "End Date": "${task.enddate}",
-                    "Duration": null,
-                    "Percent Complete": ${task.progress},
-                    "Dependencies": null
-                }
-                <c:if test="${not status.last}">,</c:if>
-            </c:forEach>
-        ]`);
+var dataArray = [];
 
-        // JSON 데이터에서 원하는 값들을 배열로 추출합니다.
-        var dataArray = taskData.map(function(item) {
-            return [
-                item["Task ID"],
-                item["Task Name"],
-                item["Resource"],
-                new Date(item["Start Date"]),
-                new Date(item["End Date"]),
-                item["Duration"],
-                item["Percent Complete"],
-                item["Dependencies"]
-            ];
-        });
+function dateDifference(a, b){
+    return (b-a+1)/(1000 * 60 * 60 * 24);
+}
+<c:forEach items="${taskList}" var="task" varStatus="status">
+    var percentage = 0;
+    var startDate = new Date("${task.startdate}");
+    var endDate = new Date("${task.enddate}");
+    var today = new Date();
+    var daysDifference = dateDifference(startDate,endDate);
+    var dayPassed = dateDifference(startDate,today);
+    if(dayPassed>=0){
+        var dayPassed = (today-startDate+1)/(endDate-startDate+1);
+        percentage = Math.round(dayPassed * 100);
+    } else {
+        percentage = 0;
+    }
+    if (percentage > 100) percentage = 100;
+    var datas = ["${task.taskId}","${task.detail}","${task.workPackage}",
+                 startDate,endDate,null,percentage, null];
 
-        console.log(dataArray);
+    dataArray.push(datas);
+</c:forEach>
 
 google.charts.load('current', {'packages':['gantt']});
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart(){
+    console.log(dataArray);
 
-
-    console.log(taskData);
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Task ID');
     data.addColumn('string', 'Task Name');
-    data.addColumn('string', 'Resource');
+    data.addColumn('string', 'workPackage');
     data.addColumn('date', 'Start Date');
     data.addColumn('date', 'End Date');
     data.addColumn('number', 'Duration');
@@ -138,8 +130,6 @@ function drawChart(){
             trackHeight: 30
         }
     };
-
-
 
     var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
 

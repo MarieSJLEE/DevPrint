@@ -4,18 +4,6 @@
 
 <mapper namespace="MemberDAO">
 
-    <!-- 프로젝트참여멤버리스트 가져오기   -->
-    <resultMap id="idAndNameResultMap" type="java.util.Map">
-        <result property="idAndName" column="idAndName"/>
-    </resultMap>
-
-    <select id="getMemberNames" resultType="String">
-        SELECT DISTINCT CONCAT(u.id, ',', u.name) AS idAndName
-        FROM user AS u
-        JOIN task AS t
-        ON t.userId = u.id
-        WHERE t.projectId = #{projectId}
-    </select>
 
 
     <!--  리더 - 멤버페이지  -->

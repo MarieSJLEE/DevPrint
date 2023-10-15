@@ -2,6 +2,7 @@ package com.devP.Controller;
 
 import com.devP.Service.LeaderService;
 import com.devP.Service.ProjectService;
+import com.devP.Service.TaskService;
 import com.devP.Service.UserService;
 import com.devP.VO.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,11 +31,23 @@ public class LeaderController {
     private ProjectService projectService;
 
     @Autowired
+    private TaskService taskService;
+
+    @Autowired
     private MailController mailController;
 
     @Autowired
     private HttpSession session;
 
+    private String toJson(Object object){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "{}";
+        }
+    }
 
     // 멤버페이지
     @ModelAttribute("positionMap")
@@ -67,8 +80,22 @@ public class LeaderController {
         categoryMap.put("6","테스트");
         categoryMap.put("7","완료");
 
+        String categoryMapJson = toJson(categoryMap);
+        model.addAttribute("categoryMapJson", categoryMapJson);
+
 
         return categoryMap;
+    }
+    @ModelAttribute("statusMap")
+    public Map<String, String> setStatusMap(Model model){
+        Map<String,String> statusMap = new HashMap<>();
+
+        statusMap.put("1","대기");
+        statusMap.put("2","진행중");
+        statusMap.put("3","검토");
+        statusMap.put("4","완료");
+
+        return statusMap;
     }
 
 
@@ -109,13 +136,6 @@ public class LeaderController {
 
     @RequestMapping(value="/project/updateMember.do", method = RequestMethod.POST)
     public String updateMember(@ModelAttribute MemberVO memberVO, Model model){
-
-
-//        for(MemberVO vo: memberVO.getMemberVOList()){
-//            System.out.println(vo.getUserId());
-//        }
-//        if(memberVO.getMemberVOList() == null){ System.out.println("다시해");}
-//        System.out.println(memberVO.getMemberVOList());
         int result = leaderService.updateMemberDatas(memberVO.getMemberVOList(), model);
 
         if(result == 200) return "redirect:/project/manageMember.do";
@@ -151,6 +171,26 @@ public class LeaderController {
 
         if(result == 200){ return "redirect:/project/manageTask.do";}
         else {return "/";}
+
+    }
+    @RequestMapping(value="/project/updateTask.do", method = RequestMethod.POST)
+    public String updateMember(@ModelAttribute TaskVO vo, Model model){
+        int result = leaderService.updateTaskDatas(vo.getTaskVOList(), model);
+
+        if(result == 200) return "redirect:/project/manageTask.do";
+        else return "redirect:/";
+    }
+    @RequestMapping(value = "/project/deleteTask.do", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteTask(@RequestParam int taskId) throws Exception {
+        try {
+            System.out.println(taskId);
+            taskService.deleteTask(taskId);
+
+            return ResponseEntity.ok("Task deleted successfully");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+
+        }
 
     }
 

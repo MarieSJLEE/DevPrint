@@ -9,6 +9,7 @@ import com.devP.VO.TaskVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,11 +23,41 @@ import javax.servlet.http.HttpSession;
 @Service("taskService")
 public class TaskServiceImpl implements TaskService {
 
+
+
     @Autowired
     private TaskDAOMybatis taskDAO;
 
     @Autowired
     private HttpSession session;
+
+	@Override
+	@ModelAttribute("categoryMap")
+	public Map<String, String> setCategoryMap() {
+		Map<String, String> categoryMap = new HashMap<>();
+
+		categoryMap.put("1", "기획");
+		categoryMap.put("2", "디자인");
+		categoryMap.put("3", "구현");
+		categoryMap.put("4", "개발");
+		categoryMap.put("5", "서버");
+		categoryMap.put("6", "테스트");
+		categoryMap.put("7", "완료");
+
+
+		return categoryMap;
+	}
+	@ModelAttribute("statusMap")
+	public Map<String, String> setStatusMap(){
+		Map<String,String> statusMap = new HashMap<>();
+
+		statusMap.put("1","대기");
+		statusMap.put("2","진행중");
+		statusMap.put("3","검토");
+		statusMap.put("4","완료");
+
+		return statusMap;
+	}
 
 	@Override
 	public List<Map<String, Object>> getMyTasks() {
@@ -132,4 +163,7 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	public void addTask(TaskVO vo){taskDAO.insertTask(vo);}
+	public void updateTask(TaskVO vo){taskDAO.updateTask(vo);}
+
+	public void deleteTask(int taskId){taskDAO.deleteTask(taskId);}
 }

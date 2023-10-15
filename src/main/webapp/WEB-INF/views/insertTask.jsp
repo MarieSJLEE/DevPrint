@@ -16,8 +16,12 @@
 </head>
 <body>
 <div class="mv-100 container">
-    <p class="projectName">${projectName}</p>
-    <p class="semiTitle">업무 수정</p>
+    <div>
+        <p class="projectName">
+            ${projectName}
+            <button class="btn btn-outline-success" type="button" onclick="location.href='list.do'">완료</button>
+        </p>
+    </div>
     <div class="manage-wrapper">
         <div class="addMember">
             <div class="manageTaskWrapper">
@@ -26,7 +30,7 @@
                 </div>
             </div>
             <div class="row">
-                <form method="post" action="/project/addTask.do">
+                <form method="post" action="/project/insertTask.do">
                     <div id="box">
                         <div class="addForm">
                             <table id="taskTbl" class="table" width=500px;>
@@ -131,7 +135,6 @@
                                                 >${member.value}</option>
                                             </c:forEach>
                                         </select></td>
-
                                         <td><input class="form-control startDate" type="date"  name="taskVOList[${loop.index}].startdate" value="${task.startdate}"/></td>
                                         <td><input class="form-control endDate" type="date"  name="taskVOList[${loop.index}].enddate" value="${task.enddate}"/></td>
                                         <td>
@@ -149,6 +152,7 @@
                                 </c:forEach>
                             </tbody>
                         </table>
+
                         <input class="form-control" type="submit" value="수정">
                     </div>
                 </div>
@@ -202,8 +206,11 @@ function dateDifference(a, b){
     dataArray.push(datas);
 </c:forEach>
 
-google.charts.load('current', {'packages':['gantt']});
-google.charts.setOnLoadCallback(drawChart);
+
+if(dataArray[0] !== null && dataArray.length>0){
+    google.charts.load('current', {'packages':['gantt']});
+    google.charts.setOnLoadCallback(drawChart);
+}
 
 function drawChart(){
     console.log(dataArray);
@@ -232,6 +239,9 @@ function drawChart(){
     chart.draw(data, options);
 
 }
+
+
+
 </script>
 </body>
 </html>

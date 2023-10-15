@@ -1,5 +1,6 @@
 var cols = 0;
 var headers = ["category","workPackage","depth","detail","status","responsibility","startDate","endDate"];
+
 var categoryMap = JSON.parse('${categoryMapJson}');
 
 var categoryArray = [];
@@ -21,7 +22,6 @@ var colData = [
     { label: "시작일", name: "startDate" },
     { label: "종료일", name: "endDate" }
 ];
-
 $(document).ready(function(){
     var table = document.getElementById("taskTbl");
     var colCount = 0;
@@ -95,17 +95,23 @@ function add_depth(){
         }
     }
 
-    function getCurrentDate(){
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth()+1).padStart(2,'0');
-        const day = String(now.getDate()).padStart(2,'0');
 
-        return year+"-"+month+"-"+day;
+
+function deleteTask(taskId){
+    if(confirm("업무를 삭제하시겠습니까?")){
+        $.ajax({
+            type: 'POST',
+            url: '/project/deleteTask.do',
+            data: {
+                taskId: taskId
+            },
+            success: function(response){
+                alert("삭제되었습니다");
+                window.location.href="/project/manageTask.do";
+            },
+            error: function(error){
+                console.log("에러: "+error);
+            }
+        });
     }
-    const currentDate = getCurrentDate();
-    console.log(currentDate);
-    document.getElementById('startDate').setAttribute('min', currentDate);
-    document.getElementById('startDate').setAttribute('value', currentDate);
-    document.getElementById('endDate').setAttribute('min', currentDate);
-    document.getElementById('endDate').setAttribute('value', currentDate);
+}

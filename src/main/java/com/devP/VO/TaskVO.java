@@ -1,6 +1,7 @@
 package com.devP.VO;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,6 +21,8 @@ public class TaskVO {
 
     private String startdate;
     private String enddate;
+
+	private ArrayList<TaskVO> taskVOList;
     
     public int getTaskId() {
 		return taskId;
@@ -86,4 +89,7 @@ public class TaskVO {
 	public void setEnddate(String  enddate) {
 		this.enddate = enddate;
 	}
+
+	public ArrayList<TaskVO> getTaskVOList(){return taskVOList;}
+	public void setTaskVOList(ArrayList<TaskVO> taskVOList){ this.taskVOList = taskVOList;}
 }

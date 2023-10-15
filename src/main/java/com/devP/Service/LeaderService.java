@@ -37,4 +37,6 @@ public interface LeaderService {
     int getTaskDatas(TaskVO vo, Model model);
 
     int addTask(TaskVO vo);
+
+    int updateTaskDatas(ArrayList<TaskVO> taskVOList, Model model);
 }

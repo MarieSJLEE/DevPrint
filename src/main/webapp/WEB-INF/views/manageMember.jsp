@@ -33,7 +33,6 @@
     <div  class="member-wrapper">
         <p class="manageMemberWrapper formLabel col-form-label">멤버 관리</p>
         <form:form class="manageForm" modelAttribute="MemberVO" name="dataForm" id="dataForm" method="post" action="/project/updateMember.do" >
-        <!-- <form class="manageForm" modelAttribute="members" method="post" action="/project/updateMember.do"> -->
             <table class="table" width=500px;>
                 <thead>
                     <tr>

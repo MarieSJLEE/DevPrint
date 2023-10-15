@@ -13,8 +13,7 @@ import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 @Service("projectService")
@@ -37,11 +36,9 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDAO.getProject(vo);
     }
 
-
-
     @Override
-    public String getProjectName(ProjectVO vo){
-        return projectDAO.getProjectName(vo);
+    public String getProjectName(int projectId){
+        return projectDAO.getProjectName(projectId);
     }
 
     @Override
@@ -56,6 +53,16 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private LeaderService leaderService;
+
+    @Override
+    public Map<String, String> setMemberMap(List<String> members){
+        Map<String, String> memberMap = new HashMap<String, String>();
+        for(String member: members){
+            String[] m = member.split(",");
+            memberMap.put(m[0], m[1]);
+        }
+        return memberMap;
+    }
 
     @Override
     public int insertProject(ProjectVO vo, MemberVO vo2, ProjectGroupVO vo3) throws Exception {
@@ -114,7 +121,7 @@ public class ProjectServiceImpl implements ProjectService {
         member.setProjectId(Integer.parseInt((session.getAttribute("projectId")).toString()));
         member.setUserId((String) session.getAttribute("id"));
         project.setProgress(getProjectProgress(project));   // 프로젝트 진행률
-        project.setProjectName(getProjectName(project));
+        project.setProjectName(getProjectName(project.getProjectId()));
 
         // 업무가져오기
         task.setProjectId(project.getProjectId());
@@ -152,6 +159,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<MemberVO> getProjectMemberList(int projectId) {
         return memberDAO.getProjectMemberList(projectId);
+    }
+
+    @Override
+    public List<String> getMemberNames(int projectId){
+        return projectDAO.getMemberNames(projectId);
     }
 
 }

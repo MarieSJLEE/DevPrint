@@ -32,4 +32,7 @@ public class TaskDAOMybatis {
     public List<TaskVO> getMyProjectTaskList(TaskVO vo) { return mybatis.selectList("TaskDAO.getMyProjectTaskList", vo); }
 
     public void insertTask(TaskVO vo){ mybatis.insert("TaskDAO.insertTask",vo);}
+
+    public void updateTask(TaskVO vo){ mybatis.update("TaskDAO.updateTask", vo); }
+    public void deleteTask(int taskId){mybatis.delete("TaskDAO.deleteTask", taskId);}
 }

@@ -1,6 +1,8 @@
 package com.devP.Mapper.Impl;
 
 import com.devP.Mapper.Repository.MemberDAOMybatis;
+import com.devP.Mapper.Repository.ProjectDAOMybatis;
+import com.devP.Mapper.Repository.TaskDAOMybatis;
 import com.devP.Service.*;
 import com.devP.VO.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,11 @@ public class LeaderServiceImpl implements LeaderService {
 	private MemberDAOMybatis memberDAO;
 
 	@Autowired
+	private ProjectDAOMybatis projectDAO;
+	@Autowired
+	private TaskDAOMybatis taskDAO;
+
+	@Autowired
 	private MailService mailService;
 	@Autowired
 	private ProjectService projectService;
@@ -33,14 +40,6 @@ public class LeaderServiceImpl implements LeaderService {
 	@Autowired
 	private HttpSession session;
 
-	public Map<String, String> setMemberMap(List<String> members){
-		Map<String, String> memberMap = new HashMap<String, String>();
-		for(String member: members){
-			String[] m = member.split(",");
-			memberMap.put(m[0], m[1]);
-		}
-		return memberMap;
-	}
 
 
 	@Override
@@ -58,7 +57,7 @@ public class LeaderServiceImpl implements LeaderService {
 		ProjectVO project = new ProjectVO();		//임시
 		project.setProjectId(vo.getProjectId());					//임시
 		session.setAttribute("projectId",project.getProjectId());	//임시
-		session.setAttribute("projectName",projectService.getProjectName(project));	//임시
+		session.setAttribute("projectName",projectService.getProjectName(project.getProjectId()));	//임시
 		model.addAttribute("memberList", memberDAO.getMemberList(vo.getProjectId()));
 		//System.out.println(memberDAO.getMemberList(vo.getProjectId()).get(0).getRole());
 		if (memberDAO.getMemberList(vo.getProjectId()) != null) return 200;
@@ -181,12 +180,12 @@ public class LeaderServiceImpl implements LeaderService {
 
 	@Override
 	public int getTaskDatas(TaskVO vo, Model model){
-		List<String> memberList = memberDAO.getMemberNames(vo.getProjectId());
+		List<String> memberList = projectDAO.getMemberNames(vo.getProjectId());
 		vo.setProjectId(Integer.parseInt(session.getAttribute("projectId").toString()));
-		vo.setUserId(session.getAttribute("id").toString());
-		model.addAttribute("taskList",taskService.getMyProjectTaskList(vo));
+		model.addAttribute("taskList",taskService.getProjectTaskList(Integer.parseInt(session.getAttribute("projectId").toString())));
+		model.addAttribute("projectName",projectService.getProjectName(Integer.parseInt(session.getAttribute("projectId").toString())));	//임시
 
-		model.addAttribute("memberMap",setMemberMap(memberList));
+		model.addAttribute("memberMap",projectService.setMemberMap(memberList));
 
 
 		return 200;
@@ -198,6 +197,16 @@ public class LeaderServiceImpl implements LeaderService {
 		vo.setUserId(session.getAttribute("id").toString());
 		taskService.addTask(vo);
 		return 200;
+	}
+	@Override
+	public int updateTaskDatas(ArrayList<TaskVO> TaskVOList, Model model){
+
+		for(TaskVO vo : TaskVOList){
+			taskService.updateTask(vo);
+		}
+
+		return 200;
+
 	}
 
 }

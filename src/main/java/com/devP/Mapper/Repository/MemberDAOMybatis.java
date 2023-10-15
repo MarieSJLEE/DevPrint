@@ -15,7 +15,6 @@ public class MemberDAOMybatis {
     @Autowired
     private SqlSessionTemplate mybatis;
 
-    public List<String> getMemberNames(int projectId){return mybatis.selectList("MemberDAO.getMemberNames", projectId);}
 
     //leader - 멤버페이지
     public List<MemberVO> getMemberList(int projectId){ return mybatis.selectList("MemberDAO.getMemberList", projectId); }
