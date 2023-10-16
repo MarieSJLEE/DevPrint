@@ -1,6 +1,7 @@
 package com.devP.Controller;
 
 import com.devP.Service.IssueService;
+import com.devP.Service.ProjectService;
 import com.devP.Service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ public class CommonController {
     private IssueService issueService;
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private ProjectService projectService;
     @Autowired
     private HttpSession session;
 
